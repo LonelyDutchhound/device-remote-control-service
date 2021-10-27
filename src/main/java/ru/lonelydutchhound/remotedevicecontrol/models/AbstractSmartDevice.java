@@ -4,8 +4,8 @@ package ru.lonelydutchhound.remotedevicecontrol.models;
 import java.util.List;
 import java.util.UUID;
 
-public interface AbstractSmartDevice {
+public interface AbstractSmartDevice<T> {
     UUID getId();
     String getModel();
-    List<Program> getProgramList();
+    List<T> getProgramList();
 }
