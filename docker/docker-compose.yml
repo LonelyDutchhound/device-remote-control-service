@@ -1,0 +1,16 @@
+version: "3"
+services:
+  postgres:
+    image: 'postgres:13-alpine'
+    container_name: 'remote-control-db'
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=remote_control_db
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data: {}
