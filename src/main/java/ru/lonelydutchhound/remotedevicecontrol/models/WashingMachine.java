@@ -11,9 +11,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "washing_machine")
 @ToString
-@Getter
 @NoArgsConstructor
-public class WashingMachine implements AbstractSmartDevice {
+public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     @Id
     @GeneratedValue
     private UUID id;
@@ -27,4 +26,19 @@ public class WashingMachine implements AbstractSmartDevice {
             inverseJoinColumns = @JoinColumn(name = "program_id"))
     @ToString.Exclude
     private List<WashingProgram> programList;
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getModel() {
+        return this.model;
+    }
+
+    @Override
+    public List<WashingProgram> getProgramList() {
+        return this.programList;
+    }
 }
