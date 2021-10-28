@@ -1,10 +1,12 @@
 package ru.lonelydutchhound.remotedevicecontrol.models;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +15,11 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
+    private WashingMachine(WashingMachineBuilder builder) {
+        this.id = builder.uuid;
+        this.model = builder.model;
+    }
+
     @Id
     @GeneratedValue
     private UUID id;
@@ -40,5 +47,30 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     @Override
     public List<WashingProgram> getProgramList() {
         return this.programList;
+    }
+
+    @NoArgsConstructor
+    public static class WashingMachineBuilder {
+        private UUID uuid;
+        private String model;
+
+        public WashingMachineBuilder setUuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public WashingMachineBuilder setModel(String model) {
+            this.model = model;
+            return this;
+        }
+
+        public WashingMachine build() {
+            WashingMachine washingMachine = new WashingMachine(this);
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            validator.validate(washingMachine);
+
+            return washingMachine;
+        }
     }
 }

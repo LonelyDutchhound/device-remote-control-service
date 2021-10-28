@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class WashingMachineDeviceDTO implements DeviceDTO{
+public class WashingMachineDeviceDTO implements DTO{
     UUID id;
     WashingMachine washingMachine;
     PowerStatus powerStatus;

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.ProgramStatus;
 
 import javax.persistence.*;
@@ -70,10 +72,8 @@ public class DeviceActivity {
 
         public DeviceActivity build() {
             DeviceActivity deviceActivity = new DeviceActivity(this);
-
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
-
             validator.validate(deviceActivity);
 
             return deviceActivity;

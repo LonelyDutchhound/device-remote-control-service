@@ -1,11 +1,14 @@
 package ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Value;
 
 import java.time.LocalDateTime;
 
-@Data
+@Value
 public class ApiError {
-    private final String message;
-    private final LocalDateTime happenedAt = LocalDateTime.now();
+    String message;
+//    @JsonProperty("happened_at")
+    LocalDateTime happenedAt = LocalDateTime.now();
 }

@@ -1,18 +1,16 @@
 package ru.lonelydutchhound.remotedevicecontrol.dto.mappers;
 
 import org.springframework.stereotype.Component;
-import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDeviceDTO;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachineDevice;
+import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDTO;
+import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachine;
 
 @Component
-public class WashingMachineDTOMapper implements DeviceDTOMapper<WashingMachineDeviceDTO, WashingMachineDevice> {
+public class WashingMachineDTOMapper implements DTOMapper<WashingMachineDTO, WashingMachine> {
     @Override
-    public WashingMachineDeviceDTO mapEntityToDto(WashingMachineDevice device) {
-        return WashingMachineDeviceDTO.builder()
-                .id(device.getId())
-                .washingMachine(device.getWashingMachine())
-                .powerStatus(device.getPowerStatus())
-                .createdAt(device.getCreatedAt())
+    public WashingMachineDTO mapEntityToDto(WashingMachine washingMachine) {
+        return WashingMachineDTO.builder()
+                .id(washingMachine.getId())
+                .model(washingMachine.getModel())
                 .build();
     }
 }

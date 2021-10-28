@@ -1,4 +1,4 @@
 package ru.lonelydutchhound.remotedevicecontrol.dto;
 
-public interface DeviceDTO {
+public interface DTO {
 }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class WashingProgramDTO {
+public class WashingProgramDTO implements DTO{
     UUID id;
     String name;
     byte temperature;

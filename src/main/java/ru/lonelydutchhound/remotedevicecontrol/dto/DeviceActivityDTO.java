@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class DeviceActivityDTO {
+public class DeviceActivityDTO implements DTO{
     UUID id;
     UUID deviceId;
     WashingProgram program;
