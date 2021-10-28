@@ -1,6 +1,7 @@
 package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,17 @@ public class DeviceController {
         this.washingMachineDTOMapper = washingMachineDTOMapper;
     }
 
-    @GetMapping(value = "/devices", produces = "application/json")
+    @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WashingMachineDeviceDTO>> getAllDevices() {
         var washingMachineDeviceDTOList = washingMachineDeviceService.getAllActiveDevices()
                 .stream().map(washingMachineDTOMapper::mapEntityToDto).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(washingMachineDeviceDTOList);
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WashingMachineDeviceDTO> getWashingMachineById(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(washingMachineDTOMapper.mapEntityToDto(washingMachineDeviceService.getDeviceById(UUID.fromString(id))));
     }
 
     @PostMapping(
