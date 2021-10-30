@@ -1,9 +1,10 @@
-package ru.lonelydutchhound.remotedevicecontrol.models;
+package ru.lonelydutchhound.remotedevicecontrol.models.device;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.PowerStatus;
 
 import javax.persistence.*;
@@ -16,6 +17,11 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class WashingMachineDevice implements Device {
+    public WashingMachineDevice(WashingMachine washingMachine) {
+        this.washingMachine = washingMachine;
+        this.powerStatus = PowerStatus.ON;
+    }
+
     @Id
     @GeneratedValue
     private UUID id;

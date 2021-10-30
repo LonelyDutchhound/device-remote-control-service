@@ -10,7 +10,7 @@ import java.util.UUID;
 public class WashingProgramDTO implements DTO{
     UUID id;
     String name;
-    byte temperature;
+    int temperature;
     Long duration;
     int spinSpeed;
 }

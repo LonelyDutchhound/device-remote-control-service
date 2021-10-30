@@ -2,7 +2,7 @@ package ru.lonelydutchhound.remotedevicecontrol.dto;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.PowerStatus;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class WashingMachineDeviceDTO implements DTO{
     UUID id;
-    WashingMachine washingMachine;
+    WashingMachineDTO washingMachine;
     PowerStatus powerStatus;
     LocalDateTime createdAt;
     LocalDateTime deletedAt;

@@ -2,8 +2,7 @@ package ru.lonelydutchhound.remotedevicecontrol.dto.mappers;
 
 import org.springframework.stereotype.Component;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingProgramDTO;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingProgram;
-import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.DTOMapper;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 
 @Component
 public class WashingProgramDTOMapper implements DTOMapper<WashingProgramDTO, WashingProgram> {

@@ -2,9 +2,8 @@ package ru.lonelydutchhound.remotedevicecontrol.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachine;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachineDevice;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingProgram;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramRepository;
 

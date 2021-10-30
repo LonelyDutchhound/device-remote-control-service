@@ -1,13 +1,15 @@
-package ru.lonelydutchhound.remotedevicecontrol.models;
+package ru.lonelydutchhound.remotedevicecontrol.models.smartDevice;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 
 import javax.persistence.*;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,13 +28,14 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
 
     private String model;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "washing_machine_program",
             joinColumns = @JoinColumn(name = "machine_id"),
             inverseJoinColumns = @JoinColumn(name = "program_id"))
     @ToString.Exclude
-    private List<WashingProgram> programList;
+    @JsonManagedReference
+    private Set<WashingProgram> programSet;
 
     @Override
     public UUID getId() {
@@ -45,8 +48,8 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     }
 
     @Override
-    public List<WashingProgram> getProgramList() {
-        return this.programList;
+    public Set<WashingProgram> getProgramSet() {
+        return this.programSet;
     }
 
     @NoArgsConstructor

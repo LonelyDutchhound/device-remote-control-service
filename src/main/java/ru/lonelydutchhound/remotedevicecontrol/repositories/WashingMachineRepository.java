@@ -1,7 +1,7 @@
 package ru.lonelydutchhound.remotedevicecontrol.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 
 import java.util.UUID;
 

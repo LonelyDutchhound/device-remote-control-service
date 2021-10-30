@@ -1,5 +1,6 @@
 package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,8 +13,8 @@ import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingProgramDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingProgramDTOMapper;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingMachine;
-import ru.lonelydutchhound.remotedevicecontrol.models.WashingProgram;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 import ru.lonelydutchhound.remotedevicecontrol.services.AdminWashingMachineService;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/admin/washing-machine")
+@Tag(name = "Admin control panel", description = "Customise user devices")
 public class AdminDeviceController {
     private final AdminWashingMachineService adminWashingMachineService;
     private final WashingProgramDTOMapper washingProgramDTOMapper;
