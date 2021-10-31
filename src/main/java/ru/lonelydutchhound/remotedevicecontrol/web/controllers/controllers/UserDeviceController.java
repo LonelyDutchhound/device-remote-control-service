@@ -13,11 +13,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.lonelydutchhound.remotedevicecontrol.dto.DeviceActivityDTO;
+import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDeviceDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.DeviceActivityDTOMapper;
+import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDeviceDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.logging.MethodWithMDC;
-import ru.lonelydutchhound.remotedevicecontrol.services.UserWashingMachineDeviceService;
+import ru.lonelydutchhound.remotedevicecontrol.services.device.WashingMachineDeviceService;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineDeviceRequest;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.StartProgramRequest;
 
@@ -30,18 +32,35 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/washing-machine")
 @Tag(name = "User remote control", description = "Remote control for devices from user side")
 public class UserDeviceController {
-    private final UserWashingMachineDeviceService userWashingMachineDeviceService;
+    private final WashingMachineDeviceService washingMachineDeviceService;
     private final WashingMachineDeviceDTOMapper washingMachineDeviceDTOMapper;
     private final DeviceActivityDTOMapper deviceActivityDTOMapper;
+    private final WashingMachineDTOMapper washingMachineDTOMapper;
 
     @Autowired
     public UserDeviceController(
-            UserWashingMachineDeviceService userWashingMachineDeviceService,
+            WashingMachineDeviceService washingMachineDeviceService,
             WashingMachineDeviceDTOMapper washingMachineDeviceDTOMapper,
-            DeviceActivityDTOMapper deviceActivityDTOMapper) {
-        this.userWashingMachineDeviceService = userWashingMachineDeviceService;
+            DeviceActivityDTOMapper deviceActivityDTOMapper,
+            WashingMachineDTOMapper washingMachineDTOMapper
+    ) {
+        this.washingMachineDeviceService = washingMachineDeviceService;
         this.washingMachineDeviceDTOMapper = washingMachineDeviceDTOMapper;
         this.deviceActivityDTOMapper = deviceActivityDTOMapper;
+        this.washingMachineDTOMapper = washingMachineDTOMapper;
+    }
+
+    @MethodWithMDC
+    @Operation(
+            summary = "Get all washing machine models with full info",
+            description = "Full information about washing machines with program list",
+            tags = {"machine"}
+    )
+    @GetMapping("/machines")
+    public ResponseEntity<List<WashingMachineDTO>> getAllMachines() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(washingMachineDeviceService.getAllMachines().stream().map(washingMachineDTOMapper::mapEntityToDto).collect(Collectors.toList()));
     }
 
     @MethodWithMDC
@@ -52,7 +71,7 @@ public class UserDeviceController {
     )
     @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WashingMachineDeviceDTO>> getAllDevices() {
-        var washingMachineDeviceDTOList = userWashingMachineDeviceService.getAllActiveDevices()
+        var washingMachineDeviceDTOList = washingMachineDeviceService.getAllActiveDevices()
                 .stream().map(washingMachineDeviceDTOMapper::mapEntityToDto).collect(Collectors.toList());
 
         return ResponseEntity
@@ -81,7 +100,7 @@ public class UserDeviceController {
     public ResponseEntity<WashingMachineDeviceDTO> addWashingMachineDevice(
             @Parameter(description = "Washing machine model to add. ID can't be null or empty.", required = true, schema = @Schema(implementation = AddWashingMachineDeviceRequest.class))
             @RequestBody AddWashingMachineDeviceRequest request) {
-        var device = userWashingMachineDeviceService.createDevice(request.getMachineId());
+        var device = washingMachineDeviceService.createDevice(request.getMachineId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -102,7 +121,7 @@ public class UserDeviceController {
     })
     @GetMapping(value = "/devices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WashingMachineDeviceDTO> getWashingMachineById(@PathVariable String id) {
-        var device =userWashingMachineDeviceService.getDeviceById(UUID.fromString(id));
+        var device = washingMachineDeviceService.getDeviceById(UUID.fromString(id));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -122,7 +141,7 @@ public class UserDeviceController {
     })
     @DeleteMapping(value = "/devices/{id}")
     public void deleteDevice(@PathVariable String id) {
-        userWashingMachineDeviceService.deleteDeviceById(UUID.fromString(id));
+        washingMachineDeviceService.deleteDeviceById(UUID.fromString(id));
     }
 
     @MethodWithMDC
@@ -144,7 +163,7 @@ public class UserDeviceController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<DeviceActivityDTO> startProgram(@RequestBody @Valid StartProgramRequest request) {
-        var activity = userWashingMachineDeviceService.startNewDeviceProgram(request.getDeviceId(), request.getProgramId());
+        var activity = washingMachineDeviceService.startNewDeviceProgram(request.getDeviceId(), request.getProgramId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -20,6 +20,7 @@ import ru.lonelydutchhound.remotedevicecontrol.repositories.DeviceActivityReposi
 import ru.lonelydutchhound.remotedevicecontrol.repositories.DeviceRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramRepository;
+import ru.lonelydutchhound.remotedevicecontrol.services.device.WashingMachineDeviceService;
 
 import java.util.*;
 
@@ -28,11 +29,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
 @SpringJUnitConfig
-@ContextConfiguration(classes = {UserWashingMachineDeviceService.class})
+@ContextConfiguration(classes = {WashingMachineDeviceService.class})
 @DisplayName("UserWashingMachineDeviceService test")
-public class UserWashingMachineDeviceServiceTest {
+public class WashingMachineDeviceServiceTest {
     private final UUID id = UUID.randomUUID();
-    private final UserWashingMachineDeviceService userWashingMachineDeviceService;
+    private final WashingMachineDeviceService washingMachineDeviceService;
 
     @MockBean
     private DeviceRepository deviceRepository;
@@ -51,17 +52,29 @@ public class UserWashingMachineDeviceServiceTest {
     WashingProgram washingProgram;
 
     @Autowired
-    public UserWashingMachineDeviceServiceTest(UserWashingMachineDeviceService userWashingMachineDeviceService) {
-        this.userWashingMachineDeviceService = userWashingMachineDeviceService;
+    public WashingMachineDeviceServiceTest(WashingMachineDeviceService washingMachineDeviceService) {
+        this.washingMachineDeviceService = washingMachineDeviceService;
+    }
+
+    @Test
+    @DisplayName("All machines obtaining succeed")
+    void getAllMachines_Succeed() {
+        Mockito.when(washingMachineRepository.findAll())
+                .thenReturn(List.of(washingMachine));
+
+        var result = washingMachineDeviceService.getAllMachines();
+        assertNotNull(result);
+        assertEquals(result.size(), 1);
+        assertTrue(result.contains(washingMachine));
     }
 
     @Test
     @DisplayName("All devices obtaining succeed")
-    void getAllActiveDevicesSucceed() {
+    void getAllActiveDevices_Succeed() {
         Mockito.when(deviceRepository.findAllByDeletedAtIsNull())
                 .thenReturn(new ArrayList<>());
 
-        var result = userWashingMachineDeviceService.getAllActiveDevices();
+        var result = washingMachineDeviceService.getAllActiveDevices();
         assertNotNull(result);
     }
 
@@ -71,7 +84,7 @@ public class UserWashingMachineDeviceServiceTest {
         Mockito.when(deviceRepository.findById(id))
                 .thenReturn(Optional.of(new WashingMachineDevice()));
 
-        var result = userWashingMachineDeviceService.getDeviceById(id);
+        var result = washingMachineDeviceService.getDeviceById(id);
         assertNotNull(result);
     }
 
@@ -83,7 +96,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(deviceRepository.findById(id))
                     .thenReturn(Optional.empty());
 
-            userWashingMachineDeviceService.getDeviceById(id);
+            washingMachineDeviceService.getDeviceById(id);
         });
 
         String expectedMessage = "No device with id";
@@ -102,7 +115,7 @@ public class UserWashingMachineDeviceServiceTest {
         Mockito.when(deviceRepository.save(any()))
                 .thenReturn(washingMachineDevice);
 
-        var result = userWashingMachineDeviceService.createDevice(id);
+        var result = washingMachineDeviceService.createDevice(id);
         assertEquals(result, washingMachineDevice);
     }
 
@@ -113,7 +126,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(washingMachineRepository.findById(id))
                     .thenReturn(Optional.empty());
 
-            userWashingMachineDeviceService.createDevice(id);
+            washingMachineDeviceService.createDevice(id);
         });
 
         String expectedMessage = "No device with id";
@@ -131,7 +144,7 @@ public class UserWashingMachineDeviceServiceTest {
         Mockito.when(deviceActivityRepository.findOneByWashingMachineDeviceIdAndProgramStatusNot(id, ProgramStatus.FINISHED))
                 .thenReturn(Optional.empty());
 
-        userWashingMachineDeviceService.deleteDeviceById(id);
+        washingMachineDeviceService.deleteDeviceById(id);
         Mockito.verify(deviceRepository, times(1)).delete(washingMachineDevice);
     }
 
@@ -142,7 +155,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(deviceRepository.findById(any()))
                     .thenReturn(Optional.empty());
 
-            userWashingMachineDeviceService.deleteDeviceById(id);
+            washingMachineDeviceService.deleteDeviceById(id);
         });
 
         String expectedMessage = "No device with id";
@@ -163,7 +176,7 @@ public class UserWashingMachineDeviceServiceTest {
                     .findOneByWashingMachineDeviceIdAndProgramStatusNot(any(), any()))
                     .thenReturn(Optional.of(activity));
 
-            userWashingMachineDeviceService.deleteDeviceById(id);
+            washingMachineDeviceService.deleteDeviceById(id);
         });
 
         String expectedMessage = "is running a program right now";
@@ -184,7 +197,7 @@ public class UserWashingMachineDeviceServiceTest {
                             .findOneByWashingMachineDeviceIdAndProgramStatusNot(any(), any()))
                     .thenReturn(Optional.of(activity));
 
-            userWashingMachineDeviceService.deleteDeviceById(id);
+            washingMachineDeviceService.deleteDeviceById(id);
         });
 
         String expectedMessage = "has error program status";
@@ -206,7 +219,7 @@ public class UserWashingMachineDeviceServiceTest {
         Mockito.when(deviceActivityRepository.findOneByWashingMachineDeviceIdAndProgramStatusNot(any(), any()))
                 .thenReturn(Optional.empty());
 
-        userWashingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
+        washingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
         Mockito.verify(deviceActivityRepository, times(1)).save(any());
     }
 
@@ -222,7 +235,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(washingProgram.getWashingMachineSet())
                     .thenReturn(new HashSet<>());
 
-            userWashingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
+            washingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
         });
 
         String expectedMessage = "No program with id";
@@ -240,7 +253,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(deviceRepository.findById(id))
                     .thenReturn(Optional.of(device));
 
-            userWashingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
+            washingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
         });
 
         String expectedMessage = "is switched off";
@@ -259,7 +272,7 @@ public class UserWashingMachineDeviceServiceTest {
             Mockito.when(washingProgramRepository.findById(any()))
                     .thenReturn(Optional.empty());
 
-            userWashingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
+            washingMachineDeviceService.startNewDeviceProgram(id, UUID.randomUUID());
         });
 
         String expectedMessage = "No program with id";

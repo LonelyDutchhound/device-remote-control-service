@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class AddWashingMachineRequest {
+public class AddWashingMachineRequest implements Request{
     private final String model;
     private final List<UUID> programIdList;
 }
