@@ -16,15 +16,16 @@
 * As an administrator, you can provide user with new smart devices and add new programs for them. 
 * As a user u can get information about smart devices, their models, programs, add device to remote control, start and pause a program.
 * API documented with OpenApi swagger located on http://localhost:(your_port)/remote-control/docs/swagger.html and u can try it right there
+* You could also get logs if needed - they are written with logback
 
 ## How to run this project
  ### In Docker:
-* Build an image with: docker build -t remote-device-control -f  docker/Dockerfile .
-* To get your base and network run: docker-compose -f docker/docker-compose.yml up -d
+* Build an image with: ```docker build -t remote-device-control -f  docker/Dockerfile .```
+* To get your base and network run: ```docker-compose -f docker/docker-compose.yml up -d```
 * Try api out with swagger on page http://localhost:3000/remote-control/docs/swagger.html
  ### Locally
 * Install maven if you haven't got it yet
-* Run: mvn spring-boot:run
+* Run: ```mvn spring-boot:run```
 (By default, it runs locally on 8080 port, database in container has 5443 port open for connection outside)
 
 ## While database has no populating scripts and TestFixtures are not ready(or you are willing to do everything manually)
