@@ -18,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class WashingMachineDevice implements Device {
     public WashingMachineDevice(WashingMachine washingMachine) {
+        this();
         this.washingMachine = washingMachine;
         this.powerStatus = PowerStatus.ON;
     }

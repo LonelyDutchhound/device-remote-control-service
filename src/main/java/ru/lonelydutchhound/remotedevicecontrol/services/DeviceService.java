@@ -10,6 +10,6 @@ public interface DeviceService<T extends Device> {
     List<T> getAllActiveDevices();
     T createDevice(UUID id);
     T getDeviceById(UUID id);
-    T deleteDeviceById(UUID id);
+    void deleteDeviceById(UUID id);
     DeviceActivity<T> startNewDeviceProgram(UUID deviceId, UUID programId);
 }

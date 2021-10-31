@@ -21,6 +21,7 @@ import ru.lonelydutchhound.remotedevicecontrol.services.UserWashingMachineDevice
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineDeviceRequest;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.StartProgramRequest;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -142,7 +143,7 @@ public class UserDeviceController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DeviceActivityDTO> startProgram(@RequestBody StartProgramRequest request) {
+    public ResponseEntity<DeviceActivityDTO> startProgram(@RequestBody @Valid StartProgramRequest request) {
         var activity = userWashingMachineDeviceService.startNewDeviceProgram(request.getDeviceId(), request.getProgramId());
 
         return ResponseEntity

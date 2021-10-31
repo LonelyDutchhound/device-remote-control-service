@@ -53,14 +53,23 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
         });
     }
 
-    public WashingMachineDevice deleteDeviceById(UUID deviceId) {
+    @Transactional
+    public WashingMachineDevice createDevice(UUID machineId) {
+        var washingMachine = washingMachineRepository.findById(machineId).orElseThrow(() -> {
+            LOGGER.error("No device with id {} found", machineId);
+            throw new NotFoundException(String.format("No device with id %s found", machineId));
+        });
+        var device = buildWashingMachineDevice(washingMachine);
+        return deviceRepository.save(device);
+    }
+
+    public void deleteDeviceById(UUID deviceId) {
         var device = getDeviceById(deviceId);
         var deviceActivityNotFinished = deviceActivityRepository.findOneByWashingMachineDeviceIdAndProgramStatusNot(deviceId, ProgramStatus.FINISHED);
 
         checkExistingDeviceActivity(deviceActivityNotFinished, deviceId);
 
         deviceRepository.delete(device);
-        return device;
     }
 
     @Transactional
@@ -95,16 +104,6 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
                 throw new IncorrectDeviceStateException(String.format("Device with id %s has error program status, make a reset", deviceId));
             }
         });
-    }
-
-    @Transactional
-    public WashingMachineDevice createDevice(UUID machineId) {
-        var washingMachine = washingMachineRepository.findById(machineId).orElseThrow(() -> {
-            LOGGER.error("No device with id {} found", machineId);
-            throw new NotFoundException(String.format("No device with %s found", machineId));
-        });
-        var device = buildWashingMachineDevice(washingMachine);
-        return deviceRepository.save(device);
     }
 
     private WashingMachineDevice findDevice(UUID deviceId) {
