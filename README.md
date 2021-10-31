@@ -20,5 +20,10 @@ Please use GitHub or Bitbucket to publish your source code.
 
 ## Important notes
 
+* Build an image with: docker build -t remote-device-control -f  docker/Dockerfile .
+* To get your base and network run: docker-compose -f docker/docker-compose.yml up -d
+* Try api out with swagger on page http://localhost:3000/remote-control/docs/swagger.html
+
+
 
 

@@ -1,16 +1,32 @@
 version: "3"
 services:
   postgres:
-    image: 'postgres:13-alpine'
-    container_name: 'remote-control-db'
+    image: postgres:13-alpine
+    container_name: remote-control-database
     ports:
-      - '5433:5432'
+      - "5443:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=remote_control_db
+    networks:
+      - remote-control
     volumes:
       - data:/var/lib/postgresql/data
+  remote-control-service:
+    image: remote-device-control
+    container_name: remote-control-service
+    ports:
+      - "3000:8080"
+    environment:
+      HTTP_PORT: 8080
+      DB_HOST: remote-control-database
+      DB_PORT: 5432
+    networks:
+      - remote-control
 
 volumes:
   data: {}
+
+networks:
+  remote-control: { }
