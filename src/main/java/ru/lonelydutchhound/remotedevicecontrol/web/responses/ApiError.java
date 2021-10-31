@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses;
+package ru.lonelydutchhound.remotedevicecontrol.web.responses;
 
 import lombok.Value;
 

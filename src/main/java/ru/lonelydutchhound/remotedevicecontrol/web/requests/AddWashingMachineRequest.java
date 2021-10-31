@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests;
+package ru.lonelydutchhound.remotedevicecontrol.web.requests;
 
 import lombok.Data;
 

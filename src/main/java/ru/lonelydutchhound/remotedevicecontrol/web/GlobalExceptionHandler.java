@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
+package ru.lonelydutchhound.remotedevicecontrol.web;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.IncorrectDeviceStateException;
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.NotFoundException;
-import ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses.ApiError;
+import ru.lonelydutchhound.remotedevicecontrol.web.responses.ApiError;
 
 @ControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)

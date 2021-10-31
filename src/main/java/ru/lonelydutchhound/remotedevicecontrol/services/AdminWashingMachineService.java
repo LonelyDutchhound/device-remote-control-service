@@ -8,7 +8,7 @@ import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramRepository;
-import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineRequest;
+import ru.lonelydutchhound.remotedevicecontrol.web.requests.AddWashingMachineRequest;
 
 import java.util.HashSet;
 import java.util.List;

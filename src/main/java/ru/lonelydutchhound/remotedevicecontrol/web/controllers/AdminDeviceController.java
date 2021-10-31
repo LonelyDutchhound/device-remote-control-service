@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.web.controllers.controllers;
+package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +20,7 @@ import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDTOMapp
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingProgramDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.logging.MethodWithMDC;
 import ru.lonelydutchhound.remotedevicecontrol.services.AdminWashingMachineService;
-import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineRequest;
+import ru.lonelydutchhound.remotedevicecontrol.web.requests.AddWashingMachineRequest;
 
 import javax.validation.Valid;
 
