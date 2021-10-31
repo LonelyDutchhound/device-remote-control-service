@@ -47,10 +47,7 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
     }
 
     public WashingMachineDevice getDeviceById(UUID deviceId) {
-        return deviceRepository.findById(deviceId).orElseThrow(() -> {
-            LOGGER.error("No device with id {} found", deviceId);
-            throw new NotFoundException(String.format("No device with %s found", deviceId));
-        });
+        return findDevice(deviceId);
     }
 
     @Transactional
@@ -81,8 +78,8 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
         }
 
         var program = findProgram(programId, device.getWashingMachine()).orElseThrow(() -> {
-            LOGGER.error("Program with id {} is not found in device with id {} set", programId, deviceId);
-            throw new NotFoundException("No program with id {} exists on this device");
+            LOGGER.error("Program with id {} is not found in device with id {} program set", programId, deviceId);
+            throw new NotFoundException("No program with id {} is supported on this device");
         });
 
         var deviceActivityNotFinished = deviceActivityRepository.findOneByWashingMachineDeviceIdAndProgramStatusNot(deviceId, ProgramStatus.FINISHED);
@@ -96,12 +93,12 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
     private void checkExistingDeviceActivity(Optional<WashingMachineDeviceActivity> deviceActivity, UUID deviceId) {
         deviceActivity.ifPresent(activity -> {
             ProgramStatus status = activity.getProgramStatus();
-            if (status == ProgramStatus.RUNNING || status == ProgramStatus.STARTING) {
-                LOGGER.error("Device with id {} is busy", deviceId);
-                throw new IncorrectDeviceStateException(String.format("Device with id %s is running a program right now, wait until it is finished", deviceId));
-            } else if (status == ProgramStatus.ERROR) {
+            if (status == ProgramStatus.ERROR) {
                 LOGGER.error("Device with id {} has error program status", deviceId);
                 throw new IncorrectDeviceStateException(String.format("Device with id %s has error program status, make a reset", deviceId));
+            } else {
+                LOGGER.error("Device with id {} is busy", deviceId);
+                throw new IncorrectDeviceStateException(String.format("Device with id %s is running a program right now, wait until it is finished", deviceId));
             }
         });
     }
@@ -109,14 +106,14 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
     private WashingMachineDevice findDevice(UUID deviceId) {
         return deviceRepository.findById(deviceId).orElseThrow(() -> {
             LOGGER.error("No device with id {} found", deviceId);
-            throw new NotFoundException(String.format("No device with %s found", deviceId));
+            throw new NotFoundException(String.format("No device with id %s found", deviceId));
         });
     }
 
     private Optional<WashingProgram> findProgram(UUID programId, WashingMachine machine) {
         var program = washingProgramRepository.findById(programId).orElseThrow(() -> {
             LOGGER.error("No program with id {} found", programId);
-            throw new NotFoundException(String.format("No program with %s on this device", programId));
+            throw new NotFoundException(String.format("No program with id %s is found", programId));
         });
         var isProgramOnDevice = program.getWashingMachineSet().contains(machine);
         if (isProgramOnDevice){

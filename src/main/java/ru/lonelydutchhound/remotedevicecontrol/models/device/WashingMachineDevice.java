@@ -40,4 +40,8 @@ public class WashingMachineDevice implements Device {
 
     @Column(name = "deleted_at", columnDefinition = "timestamp with time zone")
     private LocalDateTime deletedAt;
+
+    public void updatePowerStatus(PowerStatus status) {
+        this.powerStatus = status;
+    }
 }
