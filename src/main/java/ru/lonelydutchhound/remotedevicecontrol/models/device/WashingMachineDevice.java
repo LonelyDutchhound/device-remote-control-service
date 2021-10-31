@@ -18,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class WashingMachineDevice implements Device {
     public WashingMachineDevice(WashingMachine washingMachine) {
+        this();
         this.washingMachine = washingMachine;
         this.powerStatus = PowerStatus.ON;
     }
@@ -39,4 +40,8 @@ public class WashingMachineDevice implements Device {
 
     @Column(name = "deleted_at", columnDefinition = "timestamp with time zone")
     private LocalDateTime deletedAt;
+
+    public void updatePowerStatus(PowerStatus status) {
+        this.powerStatus = status;
+    }
 }
