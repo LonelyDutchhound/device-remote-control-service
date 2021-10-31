@@ -9,7 +9,7 @@
 * Unit tests are expected and the assignment will be assessed based on good programming practices and design.
 * Please use GitHub or Bitbucket to publish your source code.
 
-## Description of realisation
+## Description of realization
 
 * Service design is based on the idea that smart devices have only predefined programs, and the only thing user should worry about is to choose the appropriate one of them, but not to care about the parameters(ex. temperature or duration)
 * It provides both administration and user experience. 
