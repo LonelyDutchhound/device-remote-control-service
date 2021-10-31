@@ -21,7 +21,7 @@ public class WashingMachineDTOMapper implements DTOMapper<WashingMachineDTO, Was
         return WashingMachineDTO.builder()
                 .id(washingMachine.getId())
                 .model(washingMachine.getModel())
-                .programSet(washingMachine.getProgramSet().stream().map(program -> washingProgramDTOMapper.mapEntityToDto(program)).collect(Collectors.toSet()))
+                .programDTOSet(washingMachine.getProgramSet().stream().map(program -> washingProgramDTOMapper.mapEntityToDto(program)).collect(Collectors.toSet()))
                 .build();
     }
 }

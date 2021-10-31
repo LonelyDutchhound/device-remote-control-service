@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
+package ru.lonelydutchhound.remotedevicecontrol.web.controllers.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,9 +16,9 @@ import ru.lonelydutchhound.remotedevicecontrol.dto.DeviceActivityDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDeviceDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.DeviceActivityDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDeviceDTOMapper;
-import ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity.WashingMachineDeviceActivity;
+import ru.lonelydutchhound.remotedevicecontrol.logging.MethodWithMDC;
 import ru.lonelydutchhound.remotedevicecontrol.services.UserWashingMachineDeviceService;
-import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineDevice;
+import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineDeviceRequest;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.StartProgramRequest;
 
 import java.util.List;
@@ -43,6 +43,7 @@ public class UserDeviceController {
         this.deviceActivityDTOMapper = deviceActivityDTOMapper;
     }
 
+    @MethodWithMDC
     @Operation(
             summary = "Get information about devices added to remote control",
             description = "Full information about devices with program list and current power status",
@@ -53,9 +54,12 @@ public class UserDeviceController {
         var washingMachineDeviceDTOList = userWashingMachineDeviceService.getAllActiveDevices()
                 .stream().map(washingMachineDeviceDTOMapper::mapEntityToDto).collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(washingMachineDeviceDTOList);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(washingMachineDeviceDTOList);
     }
 
+    @MethodWithMDC
     @Operation(
             summary = "Add new washing machine device to remote control",
             description = "Washing machine model is searched by id, then a new device is created in remote control list",
@@ -64,7 +68,7 @@ public class UserDeviceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Device created",
                     content = @Content(schema = @Schema(implementation = WashingMachineDeviceDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Request parameter is not valid or absent"),
+            @ApiResponse(responseCode = "400", description = "Request parameter is not valid or absent or SQL constraints violated"),
             @ApiResponse(responseCode = "404", description = "Washing machine model wasn't found")
     })
     @PostMapping(
@@ -74,13 +78,16 @@ public class UserDeviceController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<WashingMachineDeviceDTO> addWashingMachineDevice(
-            @Parameter(description = "Washing machine model to add. ID can't be null or empty.", required = true, schema = @Schema(implementation = AddWashingMachineDevice.class))
-            @RequestBody AddWashingMachineDevice request) {
+            @Parameter(description = "Washing machine model to add. ID can't be null or empty.", required = true, schema = @Schema(implementation = AddWashingMachineDeviceRequest.class))
+            @RequestBody AddWashingMachineDeviceRequest request) {
         var device = userWashingMachineDeviceService.createDevice(request.getMachineId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(washingMachineDeviceDTOMapper.mapEntityToDto(device));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(washingMachineDeviceDTOMapper.mapEntityToDto(device));
     }
 
+    @MethodWithMDC
     @Operation(
             summary = "Get full information about concrete washing machine device by its id",
             description = "Full information about devices with program list and current power status",
@@ -94,30 +101,42 @@ public class UserDeviceController {
     })
     @GetMapping(value = "/devices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WashingMachineDeviceDTO> getWashingMachineById(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(washingMachineDeviceDTOMapper.mapEntityToDto(userWashingMachineDeviceService.getDeviceById(UUID.fromString(id))));
+        var device =userWashingMachineDeviceService.getDeviceById(UUID.fromString(id));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(washingMachineDeviceDTOMapper.mapEntityToDto(device));
     }
 
+    @MethodWithMDC
     @Operation(
             summary = "Delete concrete washing machine device from remote control by its id",
             description = "Washing machine device is searched by id, then a new device is deleted, endpoint returns info about deleted device",
             tags = {"device"}
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Washing machine device deleted from remote control list",
-                    content = @Content(schema = @Schema(implementation = WashingMachineDeviceDTO.class))),
+            @ApiResponse(responseCode = "204", description = "Washing machine device deleted from remote control list"),
             @ApiResponse(responseCode = "400", description = "Request parameter is not valid or absent"),
             @ApiResponse(responseCode = "404", description = "Washing machine device wasn't found by provided id")
     })
     @DeleteMapping(value = "/devices/{id}")
-    public ResponseEntity<WashingMachineDeviceDTO> deleteDevice(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(washingMachineDeviceDTOMapper.mapEntityToDto(userWashingMachineDeviceService.deleteDeviceById(UUID.fromString(id))));
+    public void deleteDevice(@PathVariable String id) {
+        userWashingMachineDeviceService.deleteDeviceById(UUID.fromString(id));
     }
 
+    @MethodWithMDC
     @Operation(
             summary = "Start program on device",
             description = "Washing machine device is searched by its id, program is searched by its id in device program set",
             tags = {"activity"}
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Program starting on device, record created",
+                    content = @Content(schema = @Schema(implementation = DeviceActivityDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Request parameters are not valid or absent"),
+            @ApiResponse(responseCode = "404", description = "Washing machine device or program weren't found by provided id"),
+            @ApiResponse(responseCode = "409", description = "Device is in incorrect power or program state")
+    })
     @PostMapping(
             value = "/programs/start",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -126,6 +145,8 @@ public class UserDeviceController {
     public ResponseEntity<DeviceActivityDTO> startProgram(@RequestBody StartProgramRequest request) {
         var activity = userWashingMachineDeviceService.startNewDeviceProgram(request.getDeviceId(), request.getProgramId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(deviceActivityDTOMapper.mapEntityToDto(activity));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(deviceActivityDTOMapper.mapEntityToDto(activity));
     }
 }

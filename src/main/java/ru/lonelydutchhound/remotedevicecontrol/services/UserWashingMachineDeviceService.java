@@ -97,14 +97,6 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
         });
     }
 
-    private WashingMachineDeviceActivity buildNewDeviceActivity(WashingMachineDevice washingMachineDevice, WashingProgram washingProgram) {
-        return new WashingMachineDeviceActivity.DeviceActivityBuilder()
-                .setWashingMachineDevice(washingMachineDevice)
-                .setWashingProgram(washingProgram)
-                .setProgramStatus(ProgramStatus.STARTING)
-                .build();
-    }
-
     @Transactional
     public WashingMachineDevice createDevice(UUID machineId) {
         var washingMachine = washingMachineRepository.findById(machineId).orElseThrow(() -> {
@@ -137,5 +129,13 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
 
     private WashingMachineDevice buildWashingMachineDevice(WashingMachine washingMachine) {
         return new WashingMachineDevice(washingMachine);
+    }
+
+    private WashingMachineDeviceActivity buildNewDeviceActivity(WashingMachineDevice washingMachineDevice, WashingProgram washingProgram) {
+        return new WashingMachineDeviceActivity.DeviceActivityBuilder()
+                .setWashingMachineDevice(washingMachineDevice)
+                .setWashingProgram(washingProgram)
+                .setProgramStatus(ProgramStatus.STARTING)
+                .build();
     }
 }

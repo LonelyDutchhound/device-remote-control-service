@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     private WashingMachine(WashingMachineBuilder builder) {
         this.id = builder.uuid;
         this.model = builder.model;
+        this.programSet = builder.programSet;
     }
 
     @Id
@@ -28,14 +30,17 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
 
     private String model;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "washing_machine_program",
             joinColumns = @JoinColumn(name = "machine_id"),
             inverseJoinColumns = @JoinColumn(name = "program_id"))
     @ToString.Exclude
     @JsonManagedReference
-    private Set<WashingProgram> programSet;
+    private Set<WashingProgram> programSet = new HashSet<>();
 
     @Override
     public UUID getId() {
@@ -56,6 +61,7 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     public static class WashingMachineBuilder {
         private UUID uuid;
         private String model;
+        private Set<WashingProgram> programSet;
 
         public WashingMachineBuilder setUuid(UUID uuid) {
             this.uuid = uuid;
@@ -64,6 +70,11 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
 
         public WashingMachineBuilder setModel(String model) {
             this.model = model;
+            return this;
+        }
+
+        public WashingMachineBuilder setProgramSet(Set<WashingProgram> washingProgramSet) {
+            this.programSet = washingProgramSet;
             return this;
         }
 

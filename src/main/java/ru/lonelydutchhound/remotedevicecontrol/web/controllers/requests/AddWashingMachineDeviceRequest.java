@@ -7,9 +7,9 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class AddWashingMachineDevice {
+public class AddWashingMachineDeviceRequest {
     @JsonCreator
-    public AddWashingMachineDevice(@JsonProperty("machineId") UUID machineId) {
+    public AddWashingMachineDeviceRequest(@JsonProperty("machineId") UUID machineId) {
         this.machineId = machineId;
     }
     private final UUID machineId;

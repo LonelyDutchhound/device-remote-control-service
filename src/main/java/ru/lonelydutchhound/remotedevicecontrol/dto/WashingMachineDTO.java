@@ -1,5 +1,6 @@
 package ru.lonelydutchhound.remotedevicecontrol.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Value;
 
@@ -11,5 +12,6 @@ import java.util.UUID;
 public class WashingMachineDTO implements DTO {
     UUID id;
     String model;
-    Set<WashingProgramDTO> programSet;
+    @JsonProperty("programSet")
+    Set<WashingProgramDTO> programDTOSet;
 }
