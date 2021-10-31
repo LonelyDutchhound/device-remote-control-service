@@ -10,5 +10,15 @@
 
 Please use GitHub or Bitbucket to publish your source code.
 
+## Description of realisation
+
+* Service design is based on the idea that smart devices have only predefined programs, and the only thing user should worry about is to choose the appropriate one of them, but not to care about the parameters(ex. temperature or duration)
+* It provides both administration and user experience. 
+* As an administrator, you can provide user with new smart devices and add new programs for them. 
+* As a user u can get information about smart devices, their models, programs, add device to remote control, start and pause a program.
+* API documented with OpenApi swagger located on http://localhost:(your_port)/remote-control/docs/swagger.html and u can try it right there
+
+## Important notes
+
 
 

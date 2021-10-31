@@ -1,0 +1,1 @@
+ALTER TYPE program_status_enum ADD VALUE 'PAUSED';

@@ -1,10 +1,12 @@
-package ru.lonelydutchhound.remotedevicecontrol.models;
+package ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Type;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
+import ru.lonelydutchhound.remotedevicecontrol.models.device.WashingMachineDevice;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.ProgramStatus;
 
 import javax.persistence.*;
@@ -17,8 +19,8 @@ import java.util.UUID;
 @Table(name = "device_activity")
 @Getter
 @NoArgsConstructor
-public class DeviceActivity {
-    private DeviceActivity(DeviceActivityBuilder builder) {
+public class WashingMachineDeviceActivity implements DeviceActivity<WashingMachineDevice> {
+    private WashingMachineDeviceActivity(DeviceActivityBuilder builder) {
         this.id = builder.uuid;
         this.washingMachineDevice = builder.washingMachineDevice;
         this.program = builder.washingProgram;
@@ -35,10 +37,12 @@ public class DeviceActivity {
 
     @OneToOne
     @JoinColumn(name = "program_id", referencedColumnName = "id")
+    @JsonManagedReference
     private WashingProgram program;
 
     @Enumerated(EnumType.STRING)
     @Type(type = "ru.lonelydutchhound.remotedevicecontrol.utils.EnumTypePostgreSql")
+    @Column(name = "program_status")
     private ProgramStatus programStatus;
 
     @NoArgsConstructor
@@ -68,12 +72,10 @@ public class DeviceActivity {
             return this;
         }
 
-        public DeviceActivity build() {
-            DeviceActivity deviceActivity = new DeviceActivity(this);
-
+        public WashingMachineDeviceActivity build() {
+            WashingMachineDeviceActivity deviceActivity = new WashingMachineDeviceActivity(this);
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
-
             validator.validate(deviceActivity);
 
             return deviceActivity;
