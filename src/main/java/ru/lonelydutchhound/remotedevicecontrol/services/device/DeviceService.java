@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.services;
+package ru.lonelydutchhound.remotedevicecontrol.services.device;
 
 import ru.lonelydutchhound.remotedevicecontrol.models.device.Device;
 import ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity.DeviceActivity;

@@ -7,8 +7,7 @@
 * The project should be implemented using Java. 
 * Feel free to use any 3rd party library that you are comfortable with. 
 * Unit tests are expected and the assignment will be assessed based on good programming practices and design.
-
-Please use GitHub or Bitbucket to publish your source code.
+* Please use GitHub or Bitbucket to publish your source code.
 
 ## Description of realisation
 
@@ -18,12 +17,24 @@ Please use GitHub or Bitbucket to publish your source code.
 * As a user u can get information about smart devices, their models, programs, add device to remote control, start and pause a program.
 * API documented with OpenApi swagger located on http://localhost:(your_port)/remote-control/docs/swagger.html and u can try it right there
 
-## Important notes
-
+## How to run this project
+ ### In Docker:
 * Build an image with: docker build -t remote-device-control -f  docker/Dockerfile .
 * To get your base and network run: docker-compose -f docker/docker-compose.yml up -d
 * Try api out with swagger on page http://localhost:3000/remote-control/docs/swagger.html
+ ### Locally
+* Install maven if you haven't got it yet
+* Run: mvn spring-boot:run
+(By default, it runs locally on 8080 port, database in container has 5443 port open for connection outside)
 
+## While database has no populating scripts and TestFixtures are not ready(or you are willing to do everything manually)
+ #### In Admin controller
+* Create some programs with /programs POST endpoint
+* Create new washing machine with some programs(you can retrieve them with /programs GET): /machines POST
+ #### In User controller
+* Get all available machines with /machines GET
+* Add washing machine for remote control with /devices POST
+* Start a program with /programs/start POST
 
 
 

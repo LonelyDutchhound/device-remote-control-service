@@ -10,35 +10,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.WashingProgramDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingProgramDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.logging.MethodWithMDC;
-import ru.lonelydutchhound.remotedevicecontrol.services.AdminWashingMachineService;
+import ru.lonelydutchhound.remotedevicecontrol.services.admin.WashingMachineAdminService;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineRequest;
+import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.CreateWashingProgramRequest;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/admin/washing-machine")
 @Tag(name = "Admin control panel", description = "Customise user devices")
 public class AdminDeviceController {
-    private final AdminWashingMachineService adminWashingMachineService;
+    private final WashingMachineAdminService washingMachineAdminService;
     private final WashingProgramDTOMapper washingProgramDTOMapper;
     private final WashingMachineDTOMapper washingMachineDTOMapper;
 
     @Autowired
     public AdminDeviceController(
-            AdminWashingMachineService adminWashingMachineService,
+            WashingMachineAdminService washingMachineAdminService,
             WashingProgramDTOMapper washingProgramDTOMapper,
         WashingMachineDTOMapper washingMachineDTOMapper
     ) {
-        this.adminWashingMachineService = adminWashingMachineService;
+        this.washingMachineAdminService = washingMachineAdminService;
         this.washingProgramDTOMapper = washingProgramDTOMapper;
         this.washingMachineDTOMapper = washingMachineDTOMapper;
     }
@@ -55,14 +55,34 @@ public class AdminDeviceController {
             @ApiResponse(responseCode = "400", description = "Request parameter is not valid or absent or SQL constraints violated")
     })
     @PostMapping(
-            value = "/program",
+            value = "/programs",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WashingProgramDTO> createWashingProgram(@RequestBody @Valid WashingProgramDTO washingProgram) {
+    public ResponseEntity<WashingProgramDTO> createWashingProgram(@RequestBody @Valid CreateWashingProgramRequest request) {
+        var washingProgram = washingMachineAdminService.buildProgram(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(washingProgramDTOMapper.mapEntityToDto(adminWashingMachineService.createNewWashingProgram(washingProgram)));
+                .body(washingProgramDTOMapper.mapEntityToDto(washingMachineAdminService.createProgram(washingProgram)));
+    }
+
+    @MethodWithMDC
+    @Operation(
+            summary = "Get information about all programs added",
+            description = "Full information about programs include parameters",
+            tags = {"program"}
+    )
+    @GetMapping(
+            value = "/programs",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<WashingProgramDTO>> getAllPrograms() {
+        var washingProgramDTOList = washingMachineAdminService.getAllPrograms()
+                .stream().map(washingProgramDTOMapper::mapEntityToDto).collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(washingProgramDTOList);
     }
 
     @MethodWithMDC
@@ -77,13 +97,14 @@ public class AdminDeviceController {
             @ApiResponse(responseCode = "400", description = "Request parameter is not valid or absent or SQL constraints violated")
     })
     @PostMapping(
-            value = "/machine",
+            value = "/machines",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<WashingMachineDTO> createWashingMachine(@RequestBody @Valid AddWashingMachineRequest addWashingMachineRequest) {
+    public ResponseEntity<WashingMachineDTO> createWashingMachine(@RequestBody @Valid AddWashingMachineRequest request) {
+        var washingMachine = washingMachineAdminService.buildSmartDevice(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(washingMachineDTOMapper.mapEntityToDto(adminWashingMachineService.createNewWashingMachine(addWashingMachineRequest)));
+                .body(washingMachineDTOMapper.mapEntityToDto(washingMachineAdminService.createNewSmartDevice(washingMachine)));
     }
 }

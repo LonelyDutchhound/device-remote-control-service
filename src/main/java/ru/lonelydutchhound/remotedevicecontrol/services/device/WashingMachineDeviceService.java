@@ -1,10 +1,11 @@
-package ru.lonelydutchhound.remotedevicecontrol.services;
+package ru.lonelydutchhound.remotedevicecontrol.services.device;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lonelydutchhound.remotedevicecontrol.dto.WashingMachineDTO;
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.*;
 import ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity.WashingMachineDeviceActivity;
 import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
@@ -22,8 +23,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserWashingMachineDeviceService implements DeviceService<WashingMachineDevice> {
-    private final Logger LOGGER = LoggerFactory.getLogger(UserWashingMachineDeviceService.class);
+public class WashingMachineDeviceService implements DeviceService<WashingMachineDevice> {
+    private final Logger LOGGER = LoggerFactory.getLogger(WashingMachineDeviceService.class);
 
     private final DeviceRepository deviceRepository;
     private final DeviceActivityRepository deviceActivityRepository;
@@ -31,7 +32,7 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
     private final WashingMachineRepository washingMachineRepository;
 
     @Autowired
-    public UserWashingMachineDeviceService(
+    public WashingMachineDeviceService(
             DeviceRepository deviceRepository,
             DeviceActivityRepository deviceActivityRepository,
             WashingProgramRepository washingProgramRepository,
@@ -133,5 +134,9 @@ public class UserWashingMachineDeviceService implements DeviceService<WashingMac
                 .setWashingProgram(washingProgram)
                 .setProgramStatus(ProgramStatus.STARTING)
                 .build();
+    }
+
+    public List<WashingMachine> getAllMachines() {
+        return washingMachineRepository.findAll();
     }
 }
