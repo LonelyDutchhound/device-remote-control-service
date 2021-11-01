@@ -3,10 +3,12 @@ package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +19,8 @@ import org.springframework.web.util.WebUtils;
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.IncorrectDeviceStateException;
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.NotFoundException;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses.ApiError;
+
+import javax.validation.ValidationException;
 
 @ControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,19 +45,27 @@ public class GlobalExceptionHandler {
         return handleExceptionInternal(methodArgumentNotValidException, new ApiError(methodArgumentNotValidException.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handleTransactionSystemException(DataIntegrityViolationException dataIntegrityViolationException, WebRequest webRequest) {
-        Throwable cause = dataIntegrityViolationException.getCause();
+    public ResponseEntity<ApiError> handleDataIntegritySystemException(NestedRuntimeException exception, WebRequest webRequest) {
+        Throwable cause = exception.getCause();
         if (cause instanceof ConstraintViolationException) {
             ConstraintViolationException ce = (ConstraintViolationException) cause;
             String errorMessage = ce.getSQLException().getMessage();
 
-            LOGGER.error("SQL constraints violated: " + errorMessage);
-            return handleExceptionInternal(dataIntegrityViolationException, new ApiError(errorMessage), HttpStatus.BAD_REQUEST, webRequest);
+            LOGGER.error("Data constraints violated: " + errorMessage);
+            return handleExceptionInternal(exception, new ApiError(errorMessage), HttpStatus.BAD_REQUEST, webRequest);
         }
-        return handleExceptionInternal(dataIntegrityViolationException, new ApiError(dataIntegrityViolationException.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
+        return handleExceptionInternal(exception, new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
     }
+
+    @ExceptionHandler({ValidationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiError> handleTransactionSystemException(ValidationException exception, WebRequest webRequest) {
+        LOGGER.error("SQL constraints violated: " + exception.getMessage());
+        return handleExceptionInternal(exception, new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

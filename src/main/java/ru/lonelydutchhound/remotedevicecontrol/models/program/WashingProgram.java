@@ -10,7 +10,9 @@ import javax.persistence.*;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,8 +36,10 @@ public class WashingProgram implements Program {
     private String name;
 
     @NotNull(message = "Temperature setting is mandatory")
+    @Min(value = 0)
     private int temperature;
 
+    @Positive
     @NotNull(message = "Duration setting is mandatory")
     private Long duration;
 
