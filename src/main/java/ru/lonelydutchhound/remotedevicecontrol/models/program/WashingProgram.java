@@ -7,9 +7,6 @@ import lombok.ToString;
 import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 
 import javax.persistence.*;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
