@@ -3,6 +3,7 @@ package ru.lonelydutchhound.remotedevicecontrol.services.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.Program;
 import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
@@ -12,6 +13,9 @@ import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.CreateWa
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class WashingMachineAdminService implements AdminService<WashingProgram, WashingMachine> {
@@ -36,24 +40,15 @@ public class WashingMachineAdminService implements AdminService<WashingProgram, 
 
     @Override
     @Transactional
-    public WashingMachine createNewSmartDevice(WashingMachine washingMachine) {
+    public WashingMachine createNewSmartDevice(String model, List<UUID> programIdList) {
+        var programList = washingProgramRepository.findAllById(programIdList);
+        var washingMachine = buildSmartDevice(model, programList);
         return washingMachineRepository.save(washingMachine);
     }
 
-    public WashingProgram buildProgram(CreateWashingProgramRequest request){
-        return new WashingProgram.WashingProgramBuilder()
-                .setName(request.getName())
-                .setDuration(request.getDuration())
-                .setTemperature(request.getTemperature())
-                .setSpinSpeed(request.getSpinSpeed())
-                .build();
-    }
-
-    public WashingMachine buildSmartDevice(AddWashingMachineRequest addWashingMachineRequest) {
-        var programList = washingProgramRepository.findAllById(addWashingMachineRequest.getProgramIdList());
-
+    public WashingMachine buildSmartDevice(String model, List<WashingProgram> programList) {
         return new WashingMachine.WashingMachineBuilder()
-                .setModel(addWashingMachineRequest.getModel())
+                .setModel(model)
                 .setProgramSet(new HashSet<>(programList))
                 .build();
     }

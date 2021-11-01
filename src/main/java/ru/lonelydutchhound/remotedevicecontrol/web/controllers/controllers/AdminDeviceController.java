@@ -16,6 +16,7 @@ import ru.lonelydutchhound.remotedevicecontrol.dto.WashingProgramDTO;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingMachineDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.dto.mappers.WashingProgramDTOMapper;
 import ru.lonelydutchhound.remotedevicecontrol.logging.MethodWithMDC;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 import ru.lonelydutchhound.remotedevicecontrol.services.admin.WashingMachineAdminService;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.AddWashingMachineRequest;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.requests.CreateWashingProgramRequest;
@@ -60,7 +61,12 @@ public class AdminDeviceController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<WashingProgramDTO> createWashingProgram(@RequestBody @Valid CreateWashingProgramRequest request) {
-        var washingProgram = washingMachineAdminService.buildProgram(request);
+        var washingProgram = new WashingProgram.WashingProgramBuilder()
+                .setName(request.getName())
+                .setDuration(request.getDuration())
+                .setTemperature(request.getTemperature())
+                .setSpinSpeed(request.getSpinSpeed())
+                .build();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(washingProgramDTOMapper.mapEntityToDto(washingMachineAdminService.createProgram(washingProgram)));
@@ -102,9 +108,8 @@ public class AdminDeviceController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<WashingMachineDTO> createWashingMachine(@RequestBody @Valid AddWashingMachineRequest request) {
-        var washingMachine = washingMachineAdminService.buildSmartDevice(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(washingMachineDTOMapper.mapEntityToDto(washingMachineAdminService.createNewSmartDevice(washingMachine)));
+                .body(washingMachineDTOMapper.mapEntityToDto(washingMachineAdminService.createNewSmartDevice(request.getModel(), request.getProgramIdList())));
     }
 }

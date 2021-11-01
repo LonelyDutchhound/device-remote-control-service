@@ -98,7 +98,7 @@ public class UserDeviceController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<WashingMachineDeviceDTO> addWashingMachineDevice(
-            @Parameter(description = "Washing machine model to add. ID can't be null or empty.", required = true, schema = @Schema(implementation = AddWashingMachineDeviceRequest.class))
+            @Parameter(description = "Washing machine model to add. Id can't be null or empty.", required = true, schema = @Schema(implementation = AddWashingMachineDeviceRequest.class))
             @RequestBody AddWashingMachineDeviceRequest request) {
         var device = washingMachineDeviceService.createDevice(request.getMachineId());
 
@@ -162,7 +162,10 @@ public class UserDeviceController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DeviceActivityDTO> startProgram(@RequestBody @Valid StartProgramRequest request) {
+    public ResponseEntity<DeviceActivityDTO> startProgram(
+            @Parameter(description = "DeviceId of the device on that we wish to run a program with programId, id can't be null or empty.", required = true, schema = @Schema(implementation = StartProgramRequest.class))
+            @RequestBody @Valid StartProgramRequest request
+    ) {
         var activity = washingMachineDeviceService.startNewDeviceProgram(request.getDeviceId(), request.getProgramId());
 
         return ResponseEntity
