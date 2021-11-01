@@ -15,6 +15,8 @@ public class StartProgramRequest {
         this.deviceId = deviceId;
         this.programId = programId;
     }
+    @NotNull
     private final UUID deviceId;
+    @NotNull
     private final UUID programId;
 }

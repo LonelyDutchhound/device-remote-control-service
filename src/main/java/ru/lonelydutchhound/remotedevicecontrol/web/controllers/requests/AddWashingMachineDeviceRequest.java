@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
@@ -12,5 +13,6 @@ public class AddWashingMachineDeviceRequest {
     public AddWashingMachineDeviceRequest(@JsonProperty("machineId") UUID machineId) {
         this.machineId = machineId;
     }
+    @NotNull
     private final UUID machineId;
 }
