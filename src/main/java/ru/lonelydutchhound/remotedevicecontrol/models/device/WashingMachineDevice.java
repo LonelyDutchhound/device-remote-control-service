@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
+import org.springframework.validation.annotation.Validated;
 import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.PowerStatus;
 

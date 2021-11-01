@@ -30,7 +30,7 @@ public class WashingMachineAdminService implements AdminService<WashingProgram, 
 
     @Override
     public WashingProgram createProgram(WashingProgram washingProgram) {
-        return washingProgramRepository.save(washingProgram);
+        return washingProgramRepository.saveAndFlush(washingProgram);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class WashingMachineAdminService implements AdminService<WashingProgram, 
     public WashingMachine createNewSmartDevice(String model, List<UUID> programIdList) {
         var programList = washingProgramRepository.findAllById(programIdList);
         var washingMachine = buildSmartDevice(model, programList);
-        return washingMachineRepository.save(washingMachine);
+        return washingMachineRepository.saveAndFlush(washingMachine);
     }
 
     public WashingMachine buildSmartDevice(String model, List<WashingProgram> programList) {

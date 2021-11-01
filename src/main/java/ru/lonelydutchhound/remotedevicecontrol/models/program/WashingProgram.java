@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -32,7 +33,8 @@ public class WashingProgram implements Program {
     @GeneratedValue
     private UUID id;
 
-    @NotNull(message = "Providing a name is mandatory")
+    @NotNull
+    @NotBlank(message = "Program name is mandatory")
     private String name;
 
     @NotNull(message = "Temperature setting is mandatory")
@@ -83,13 +85,7 @@ public class WashingProgram implements Program {
         }
 
         public WashingProgram build() {
-            WashingProgram washingProgram = new WashingProgram(this);
-
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-            validator.validate(washingProgram);
-
-            return washingProgram;
+            return new WashingProgram(this);
         }
     }
 }

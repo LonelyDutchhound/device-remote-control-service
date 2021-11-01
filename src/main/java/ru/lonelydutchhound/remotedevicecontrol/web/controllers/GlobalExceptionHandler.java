@@ -1,14 +1,11 @@
 package ru.lonelydutchhound.remotedevicecontrol.web.controllers;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,12 +17,11 @@ import ru.lonelydutchhound.remotedevicecontrol.exceptions.IncorrectDeviceStateEx
 import ru.lonelydutchhound.remotedevicecontrol.exceptions.NotFoundException;
 import ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses.ApiError;
 
-import javax.validation.ValidationException;
-
 @ControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class GlobalExceptionHandler {
     Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler({NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleNotFoundException(NotFoundException notFoundException, WebRequest webRequest) {
@@ -47,10 +43,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handleDataIntegritySystemException(NestedRuntimeException exception, WebRequest webRequest) {
+    public ResponseEntity<ApiError> handleDataIntegritySystemException(DataIntegrityViolationException exception, WebRequest webRequest) {
         Throwable cause = exception.getCause();
-        if (cause instanceof ConstraintViolationException) {
-            ConstraintViolationException ce = (ConstraintViolationException) cause;
+        if (cause instanceof org.hibernate.exception.ConstraintViolationException) {
+            org.hibernate.exception.ConstraintViolationException ce = (org.hibernate.exception.ConstraintViolationException) cause;
             String errorMessage = ce.getSQLException().getMessage();
 
             LOGGER.error("Data constraints violated: " + errorMessage);
@@ -59,11 +55,13 @@ public class GlobalExceptionHandler {
         return handleExceptionInternal(exception, new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
     }
 
-    @ExceptionHandler({ValidationException.class})
+    @ExceptionHandler({javax.validation.ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handleTransactionSystemException(ValidationException exception, WebRequest webRequest) {
-        LOGGER.error("SQL constraints violated: " + exception.getMessage());
-        return handleExceptionInternal(exception, new ApiError(exception.getMessage()), HttpStatus.BAD_REQUEST, webRequest);
+    public ResponseEntity<ApiError> handleConstraintViolationException(javax.validation.ConstraintViolationException exception, WebRequest webRequest) {
+        String errorMessage = exception.getMessage();
+
+        LOGGER.error("Data constraints violated: " + errorMessage);
+        return handleExceptionInternal(exception, new ApiError(errorMessage), HttpStatus.BAD_REQUEST, webRequest);
     }
 
 

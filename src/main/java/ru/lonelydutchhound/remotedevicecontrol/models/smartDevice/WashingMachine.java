@@ -6,13 +6,11 @@ import lombok.ToString;
 import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 
 import javax.persistence.*;
-import javax.validation.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "washing_machine")
@@ -29,8 +27,8 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
     @GeneratedValue
     private UUID id;
 
-    @NotEmpty
     @NotNull
+    @NotBlank(message = "Machine model is mandatory")
     private String model;
 
     @ManyToMany(cascade = {
@@ -82,18 +80,7 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
         }
 
         public WashingMachine build() {
-            WashingMachine washingMachine = new WashingMachine(this);
-
-            // TODO: implement validator bean, take validation out
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-            var violations = validator.validate(washingMachine);
-            if (!violations.isEmpty()) {
-                throw new ValidationException(violations.stream()
-                        .map(violation -> violation.getPropertyPath() + " " + violation.getMessage()).collect(Collectors.toList()).toString());
-            }
-
-            return washingMachine;
+            return new WashingMachine(this);
         }
     }
 }
