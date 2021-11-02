@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RemoteDeviceControlApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(RemoteDeviceControlApplication.class, args);
-    }
+  public static void main (String[] args) {
+    SpringApplication.run(RemoteDeviceControlApplication.class, args);
+  }
 
 }

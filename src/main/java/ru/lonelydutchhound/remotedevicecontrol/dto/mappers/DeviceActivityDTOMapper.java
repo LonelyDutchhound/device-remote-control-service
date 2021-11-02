@@ -6,13 +6,13 @@ import ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity.WashingMach
 
 @Component
 public class DeviceActivityDTOMapper implements DTOMapper<DeviceActivityDTO, WashingMachineDeviceActivity> {
-    @Override
-    public DeviceActivityDTO mapEntityToDto(WashingMachineDeviceActivity entity) {
-        return DeviceActivityDTO.builder()
-                .id(entity.getId())
-                .deviceId(entity.getWashingMachineDevice().getId())
-                .program(entity.getProgram())
-                .programStatus(entity.getProgramStatus())
-                .build();
-    }
+  @Override
+  public DeviceActivityDTO mapEntityToDto (WashingMachineDeviceActivity entity) {
+    return DeviceActivityDTO.builder()
+        .id(entity.getId())
+        .deviceId(entity.getWashingMachineDevice().getId())
+        .program(entity.getProgram())
+        .programStatus(entity.getProgramStatus())
+        .build();
+  }
 }

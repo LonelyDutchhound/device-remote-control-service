@@ -7,10 +7,10 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class WashingProgramDTO implements DTO{
-    UUID id;
-    String name;
-    int temperature;
-    Long duration;
-    int spinSpeed;
+public class WashingProgramDTO implements DTO {
+  UUID id;
+  String name;
+  int temperature;
+  Long duration;
+  int spinSpeed;
 }

@@ -5,7 +5,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface AbstractSmartDevice<T> {
-    UUID getId();
-    String getModel();
-    Set<T> getProgramSet();
+  UUID getId ();
+
+  String getModel ();
+
+  Set<T> getProgramSet ();
 }

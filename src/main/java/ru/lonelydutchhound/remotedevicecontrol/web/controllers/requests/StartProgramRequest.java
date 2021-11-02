@@ -9,14 +9,15 @@ import java.util.UUID;
 
 @Data
 public class StartProgramRequest {
-    @JsonCreator
-    public StartProgramRequest(@JsonProperty("deviceId") UUID deviceId,
-                               @JsonProperty("programId") UUID programId){
-        this.deviceId = deviceId;
-        this.programId = programId;
-    }
-    @NotNull
-    private final UUID deviceId;
-    @NotNull
-    private final UUID programId;
+  @JsonCreator
+  public StartProgramRequest (@JsonProperty("deviceId") UUID deviceId,
+                              @JsonProperty("programId") UUID programId) {
+    this.deviceId = deviceId;
+    this.programId = programId;
+  }
+
+  @NotNull
+  private final UUID deviceId;
+  @NotNull
+  private final UUID programId;
 }

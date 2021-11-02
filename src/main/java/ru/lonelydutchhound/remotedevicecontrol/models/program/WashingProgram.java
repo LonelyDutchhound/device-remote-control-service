@@ -20,69 +20,69 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class WashingProgram implements Program {
-    private WashingProgram(WashingProgramBuilder builder){
-        this.name = builder.name;
-        this.duration = builder.duration;
-        this.temperature = builder.temperature;
-        this.spinSpeed = builder.spinSpeed;
-    }
-    @Id
-    @GeneratedValue
-    private UUID id;
+  private WashingProgram (WashingProgramBuilder builder) {
+    this.name = builder.name;
+    this.duration = builder.duration;
+    this.temperature = builder.temperature;
+    this.spinSpeed = builder.spinSpeed;
+  }
 
-    @NotNull
-    @NotBlank(message = "Program name is mandatory")
+  @Id
+  @GeneratedValue
+  private UUID id;
+
+  @NotBlank(message = "Program name is mandatory")
+  private String name;
+
+  @NotNull(message = "Temperature setting is mandatory")
+  @Min(value = 0)
+  private int temperature;
+
+  @Positive(message = "Duration must be more then 0 minutes")
+  @NotNull(message = "Duration setting is mandatory")
+  private Long duration;
+
+  @Column(name = "spin_speed")
+  private int spinSpeed;
+
+  @ManyToMany
+  @JoinTable(
+      name = "washing_machine_program",
+      joinColumns = @JoinColumn(name = "program_id"),
+      inverseJoinColumns = @JoinColumn(name = "machine_id"))
+  @ToString.Exclude
+  @JsonBackReference
+  private Set<WashingMachine> washingMachineSet;
+
+  @NoArgsConstructor
+  public static class WashingProgramBuilder {
     private String name;
-
-    @NotNull(message = "Temperature setting is mandatory")
-    @Min(value = 0)
     private int temperature;
-
-    @Positive
-    @NotNull(message = "Duration setting is mandatory")
     private Long duration;
-
-    @Column(name = "spin_speed")
     private int spinSpeed;
 
-    @ManyToMany
-    @JoinTable(
-            name = "washing_machine_program",
-            joinColumns = @JoinColumn(name = "program_id"),
-            inverseJoinColumns = @JoinColumn(name = "machine_id"))
-    @ToString.Exclude
-    @JsonBackReference
-    private Set<WashingMachine> washingMachineSet;
-
-    @NoArgsConstructor
-    public static class WashingProgramBuilder {
-        private String name;
-        private int temperature;
-        private Long duration;
-        private int spinSpeed;
-
-        public WashingProgramBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public WashingProgramBuilder setTemperature(int temperature) {
-            this.temperature = temperature;
-            return this;
-        }
-
-        public WashingProgramBuilder setDuration(Long duration) {
-            this.duration = duration;
-            return this;
-        }
-
-        public WashingProgramBuilder setSpinSpeed(int spinSpeed) {
-            this.spinSpeed = spinSpeed;
-            return this;
-        }
-
-        public WashingProgram build() {
-            return new WashingProgram(this);
-        }
+    public WashingProgramBuilder setName (String name) {
+      this.name = name;
+      return this;
     }
+
+    public WashingProgramBuilder setTemperature (int temperature) {
+      this.temperature = temperature;
+      return this;
+    }
+
+    public WashingProgramBuilder setDuration (Long duration) {
+      this.duration = duration;
+      return this;
+    }
+
+    public WashingProgramBuilder setSpinSpeed (int spinSpeed) {
+      this.spinSpeed = spinSpeed;
+      return this;
+    }
+
+    public WashingProgram build () {
+      return new WashingProgram(this);
+    }
+  }
 }

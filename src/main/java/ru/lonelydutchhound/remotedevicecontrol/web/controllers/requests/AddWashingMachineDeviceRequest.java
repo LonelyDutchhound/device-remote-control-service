@@ -9,10 +9,11 @@ import java.util.UUID;
 
 @Data
 public class AddWashingMachineDeviceRequest {
-    @JsonCreator
-    public AddWashingMachineDeviceRequest(@JsonProperty("machineId") UUID machineId) {
-        this.machineId = machineId;
-    }
-    @NotNull
-    private final UUID machineId;
+  @JsonCreator
+  public AddWashingMachineDeviceRequest (@JsonProperty("machineId") UUID machineId) {
+    this.machineId = machineId;
+  }
+
+  @NotNull
+  private final UUID machineId;
 }

@@ -9,9 +9,9 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class DeviceActivityDTO implements DTO{
-    UUID id;
-    UUID deviceId;
-    WashingProgram program;
-    ProgramStatus programStatus;
+public class DeviceActivityDTO implements DTO {
+  UUID id;
+  UUID deviceId;
+  WashingProgram program;
+  ProgramStatus programStatus;
 }

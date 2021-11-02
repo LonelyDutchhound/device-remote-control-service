@@ -10,8 +10,8 @@ import java.util.UUID;
 @Value
 @Builder
 public class WashingMachineDTO implements DTO {
-    UUID id;
-    String model;
-    @JsonProperty("programSet")
-    Set<WashingProgramDTO> programDTOSet;
+  UUID id;
+  String model;
+  @JsonProperty("programSet")
+  Set<WashingProgramDTO> programDTOSet;
 }

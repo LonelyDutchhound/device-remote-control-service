@@ -9,19 +9,19 @@ import java.util.stream.Collectors;
 
 @Component
 public class WashingMachineDTOMapper implements DTOMapper<WashingMachineDTO, WashingMachine> {
-    private WashingProgramDTOMapper washingProgramDTOMapper;
+  private WashingProgramDTOMapper washingProgramDTOMapper;
 
-    @Autowired
-    public WashingMachineDTOMapper(WashingProgramDTOMapper washingProgramDTOMapper){
-        this.washingProgramDTOMapper = washingProgramDTOMapper;
-    }
+  @Autowired
+  public WashingMachineDTOMapper (WashingProgramDTOMapper washingProgramDTOMapper) {
+    this.washingProgramDTOMapper = washingProgramDTOMapper;
+  }
 
-    @Override
-    public WashingMachineDTO mapEntityToDto(WashingMachine washingMachine) {
-        return WashingMachineDTO.builder()
-                .id(washingMachine.getId())
-                .model(washingMachine.getModel())
-                .programDTOSet(washingMachine.getProgramSet().stream().map(program -> washingProgramDTOMapper.mapEntityToDto(program)).collect(Collectors.toSet()))
-                .build();
-    }
+  @Override
+  public WashingMachineDTO mapEntityToDto (WashingMachine washingMachine) {
+    return WashingMachineDTO.builder()
+        .id(washingMachine.getId())
+        .model(washingMachine.getModel())
+        .programDTOSet(washingMachine.getProgramSet().stream().map(program -> washingProgramDTOMapper.mapEntityToDto(program)).collect(Collectors.toSet()))
+        .build();
+  }
 }

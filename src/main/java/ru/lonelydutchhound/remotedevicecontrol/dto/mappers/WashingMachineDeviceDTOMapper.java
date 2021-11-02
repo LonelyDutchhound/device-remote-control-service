@@ -7,19 +7,20 @@ import ru.lonelydutchhound.remotedevicecontrol.models.device.WashingMachineDevic
 
 @Component
 public class WashingMachineDeviceDTOMapper implements DTOMapper<WashingMachineDeviceDTO, WashingMachineDevice> {
-    private WashingMachineDTOMapper washingMachineDTOMapper;
+  private WashingMachineDTOMapper washingMachineDTOMapper;
 
-    @Autowired
-    public WashingMachineDeviceDTOMapper(WashingMachineDTOMapper washingMachineDTOMapper){
-        this.washingMachineDTOMapper = washingMachineDTOMapper;
-    }
-    @Override
-    public WashingMachineDeviceDTO mapEntityToDto(WashingMachineDevice washingMachineDevice) {
-        return WashingMachineDeviceDTO.builder()
-                .id(washingMachineDevice.getId())
-                .washingMachine(washingMachineDTOMapper.mapEntityToDto(washingMachineDevice.getWashingMachine()))
-                .powerStatus(washingMachineDevice.getPowerStatus())
-                .createdAt(washingMachineDevice.getCreatedAt())
-                .build();
-    }
+  @Autowired
+  public WashingMachineDeviceDTOMapper (WashingMachineDTOMapper washingMachineDTOMapper) {
+    this.washingMachineDTOMapper = washingMachineDTOMapper;
+  }
+
+  @Override
+  public WashingMachineDeviceDTO mapEntityToDto (WashingMachineDevice washingMachineDevice) {
+    return WashingMachineDeviceDTO.builder()
+        .id(washingMachineDevice.getId())
+        .washingMachine(washingMachineDTOMapper.mapEntityToDto(washingMachineDevice.getWashingMachine()))
+        .powerStatus(washingMachineDevice.getPowerStatus())
+        .createdAt(washingMachineDevice.getCreatedAt())
+        .build();
+  }
 }

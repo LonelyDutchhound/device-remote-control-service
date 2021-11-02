@@ -9,11 +9,12 @@ import javax.validation.constraints.Positive;
 
 @Data
 public class CreateWashingProgramRequest implements Request {
-    @NotNull @NotBlank
-    private final String name;
-    @Min(value = 0)
-    private final int temperature;
-    @Positive
-    private final Long duration;
-    private final int spinSpeed;
+  @NotNull
+  @NotBlank
+  private final String name;
+  @Min(value = 0)
+  private final int temperature;
+  @Positive
+  private final Long duration;
+  private final int spinSpeed;
 }

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DeviceRepository extends JpaRepository<WashingMachineDevice, UUID> {
-    List<WashingMachineDevice> findAllByDeletedAtIsNull();
+  List<WashingMachineDevice> findAllByDeletedAtIsNull ();
 }
