@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @Data
 public class AddWashingMachineRequest implements Request {
-  @NotNull
   @NotBlank
   private final String model;
+  @NotNull
   private final List<UUID> programIdList;
 }
