@@ -1,19 +1,18 @@
 package ru.lonelydutchhound.remotedevicecontrol.services.device;
 
-import ru.lonelydutchhound.remotedevicecontrol.models.device.Device;
-import ru.lonelydutchhound.remotedevicecontrol.models.deviceActivity.DeviceActivity;
-
 import java.util.List;
 import java.util.UUID;
+import ru.lonelydutchhound.remotedevicecontrol.models.device.Device;
+import ru.lonelydutchhound.remotedevicecontrol.models.deviceactivity.DeviceActivity;
 
 public interface DeviceService<T extends Device> {
-  List<T> getAllActiveDevices ();
+  List<T> getAllActiveDevices();
 
-  T createDevice (UUID id);
+  T createDevice(UUID id);
 
-  T getDeviceById (UUID id);
+  T getDeviceById(UUID id);
 
-  void deleteDeviceById (UUID id);
+  void deleteDeviceById(UUID id);
 
-  DeviceActivity<T> startNewDeviceProgram (UUID deviceId, UUID programId);
+  DeviceActivity<T> startNewDeviceProgram(UUID deviceId, UUID programId);
 }

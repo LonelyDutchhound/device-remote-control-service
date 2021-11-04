@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MethodWithMDC {
-  String functionName () default "";
+public @interface MethodWithMdc {
+  String functionName() default "";
 }

@@ -1,4 +1,4 @@
 package ru.lonelydutchhound.remotedevicecontrol.gateways.washingmachine.gateway;
 
-public interface WashingMachineAPI {
+public interface WashingMachineApi {
 }

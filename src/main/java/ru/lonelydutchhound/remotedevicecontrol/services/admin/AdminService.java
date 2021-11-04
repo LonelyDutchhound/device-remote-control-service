@@ -1,15 +1,14 @@
 package ru.lonelydutchhound.remotedevicecontrol.services.admin;
 
-import ru.lonelydutchhound.remotedevicecontrol.models.program.Program;
-import ru.lonelydutchhound.remotedevicecontrol.models.smartDevice.AbstractSmartDevice;
-
 import java.util.List;
 import java.util.UUID;
+import ru.lonelydutchhound.remotedevicecontrol.models.program.Program;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartdevice.AbstractSmartDevice;
 
-public interface AdminService<T extends Program, E extends AbstractSmartDevice<T>> {
-  T createProgram (T program);
+public interface AdminService<P extends Program, D extends AbstractSmartDevice<P>> {
+  P createProgram(P program);
 
-  List<T> getAllPrograms ();
+  List<P> getAllPrograms();
 
-  E createNewSmartDevice (String model, List<UUID> programList);
+  D createNewSmartDevice(String model, List<UUID> programList);
 }

@@ -7,15 +7,15 @@ import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramReposi
 
 @SpringBootTest
 public class TestFixtures {
-    private final WashingProgramRepository washingProgramRepository;
+  private final WashingProgramRepository washingProgramRepository;
 
-    @Autowired
-    public TestFixtures(WashingProgramRepository washingProgramRepository){
-        this.washingProgramRepository = washingProgramRepository;
-    }
+  @Autowired
+  public TestFixtures(WashingProgramRepository washingProgramRepository) {
+    this.washingProgramRepository = washingProgramRepository;
+  }
 
-    @Test
-    private void generateTestData() {
-        // seed data to repository;
-    }
+  @Test
+  private void generateTestData() {
+    // seed data to repository;
+  }
 }

@@ -3,7 +3,9 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>[%date] %highlight([%level]) [T:%X{traceId}] %X{genericID} %X{backendFunctionName} %C{0} %L : %msg%n</Pattern>
+            <Pattern>[%date] %highlight([%level]) [T:%X{traceId}] %X{genericID} %X{backendFunctionName} %C{0} %L :
+                %msg%n
+            </Pattern>
         </layout>
     </appender>
 
@@ -20,7 +22,9 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            <pattern>[%date] %highlight([%level]) [T:%X{traceId}] %X{genericID} %X{backendFunctionName} %C{0} %L :
+                %msg%n
+            </pattern>
         </encoder>
     </appender>
 

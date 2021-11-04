@@ -1,8 +1,7 @@
 package ru.lonelydutchhound.remotedevicecontrol.web.controllers.responses;
 
-import lombok.Value;
-
 import java.time.LocalDateTime;
+import lombok.Value;
 
 @Value
 public class ApiError {
