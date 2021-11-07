@@ -10,14 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.lonelydutchhound.remotedevicecontrol.models.smartdevice.WashingMachine;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartappliance.WashingMachine;
 
 @Entity
 @Table(name = "washing_program")
@@ -29,14 +30,16 @@ public class WashingProgram implements Program {
   @GeneratedValue
   private UUID id;
   @NotBlank(message = "Program name is mandatory")
+  @Length(min = 2, max = 255, message = "Program name must be 2 to 255 characters long")
   private String name;
   @NotNull(message = "Temperature setting is mandatory")
-  @Min(value = 0)
+  @Range(min = 0, max = 90, message = "Temperature must be in range 0 - 90 C")
   private int temperature;
   @Positive(message = "Duration must be more then 0 minutes")
   @NotNull(message = "Duration setting is mandatory")
   private Long duration;
   @Column(name = "spin_speed")
+  @Range(min = 0, max = 2000, message = "Spin speed must be 0-2000 per min")
   private int spinSpeed;
   @ManyToMany
   @JoinTable(

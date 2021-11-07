@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.services;
+package ru.lonelydutchhound.remotedevicecontrol.services.device;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,14 +26,13 @@ import ru.lonelydutchhound.remotedevicecontrol.exceptions.NotFoundException;
 import ru.lonelydutchhound.remotedevicecontrol.models.device.WashingMachineDevice;
 import ru.lonelydutchhound.remotedevicecontrol.models.deviceactivity.WashingMachineDeviceActivity;
 import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
-import ru.lonelydutchhound.remotedevicecontrol.models.smartdevice.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartappliance.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.PowerStatus;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.ProgramStatus;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.DeviceActivityRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.DeviceRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramRepository;
-import ru.lonelydutchhound.remotedevicecontrol.services.device.WashingMachineDeviceService;
 
 @SpringJUnitConfig
 @ContextConfiguration(classes = {WashingMachineDeviceService.class})
@@ -87,10 +86,11 @@ public class WashingMachineDeviceServiceTest {
   @DisplayName("Device by id obtaining succeeds")
   void getDeviceById_Succeed() {
     Mockito.when(deviceRepository.findById(id))
-        .thenReturn(Optional.of(new WashingMachineDevice()));
+        .thenReturn(Optional.of(washingMachineDevice));
 
     var result = washingMachineDeviceService.getDeviceById(id);
     assertNotNull(result);
+    assertEquals(result, washingMachineDevice);
   }
 
   @Test

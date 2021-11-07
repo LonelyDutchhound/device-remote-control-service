@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
-import ru.lonelydutchhound.remotedevicecontrol.models.smartdevice.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartappliance.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingMachineRepository;
 import ru.lonelydutchhound.remotedevicecontrol.repositories.WashingProgramRepository;
 

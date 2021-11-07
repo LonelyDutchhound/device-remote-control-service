@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import ru.lonelydutchhound.remotedevicecontrol.models.smartdevice.WashingMachine;
+import ru.lonelydutchhound.remotedevicecontrol.models.smartappliance.WashingMachine;
 import ru.lonelydutchhound.remotedevicecontrol.models.types.PowerStatus;
 
 @Entity
