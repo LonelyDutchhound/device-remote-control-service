@@ -1,4 +1,4 @@
-package ru.lonelydutchhound.remotedevicecontrol.models.smartdevice;
+package ru.lonelydutchhound.remotedevicecontrol.models.smartappliance;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +20,7 @@ import ru.lonelydutchhound.remotedevicecontrol.models.program.WashingProgram;
 @Table(name = "washing_machine")
 @ToString
 @NoArgsConstructor
-public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
+public class WashingMachine implements AbstractSmartAppliance<WashingProgram> {
   @Id
   @GeneratedValue
   private UUID id;
@@ -56,6 +56,10 @@ public class WashingMachine implements AbstractSmartDevice<WashingProgram> {
   @Override
   public Set<WashingProgram> getProgramSet() {
     return this.programSet;
+  }
+
+  public void updateProgramSet(Set<WashingProgram> newProgramSet) {
+    this.programSet = newProgramSet;
   }
 
   @NoArgsConstructor
